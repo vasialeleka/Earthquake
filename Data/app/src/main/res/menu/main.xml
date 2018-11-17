@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/save"
+        android:icon="@drawable/ic_action_save"
+        android:title="Item"
+        android:textColor ="#fff"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/item1"
+        android:title="First"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/item2"
+        android:title="second"
+        app:showAsAction="never" />
+</menu>

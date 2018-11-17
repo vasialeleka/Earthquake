@@ -1,61 +1,69 @@
 package com.e.vasialeleka.earthqueke;
 
-import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.StrictMode;
+import android.app.LoaderManager;
+
+
+
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.v4.content.Loader;
 
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Adapter;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import org.json.JSONException;
-
+import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
-  private static final String url ="https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson";
-    ListView list ;
+public class MainActivity extends AppCompatActivity  implements LoaderCallbacks<ArrayList<Eearthquake>>, LoaderManager.LoaderCallbacks<Object> {
+    private static final String url = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson";
+    private static final int EARTHQUAKE_LOADER_ID = 1;
+    ListView list;
+
+    private EarthquakeAdapter mAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-       // StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        //StrictMode.setThreadPolicy(policy);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        android.app.LoaderManager loaderManager = getLoaderManager();
+        // Initialize the loader. Pass in the int ID constant defined above and pass in null for
+        // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
+        // because this activity implements the LoaderCallbacks interface).
+        loaderManager.initLoader(1, null, this);
 
-EartQuake task = new EartQuake();
-task.execute(url);
-      /*  ArrayList<Eearthquake> earthqueke = null; //new ArrayList<Eearthquake>();
-        try {
-            earthqueke = QueryUtils.fetchEarthQuakeData(url);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }*/
-        // earthqueke.add(QueryUtils.fetchEarthQuakeData(url));
-
-
-        //Update(earthqueke);
+        //    EartQuake task = new EartQuake();
+        //     task.execute(url);
+    }
+    @Override
+    public Loader<ArrayList<Eearthquake>> onCreateLoader(int i, Bundle bundle) {
 
 
-
-
+        return new EarthquakeLoader(this, url);
     }
 
+    @Override
+    public void onLoadFinished(Loader<ArrayList<Eearthquake>> loader, ArrayList<Eearthquake> earthquakes) {
+        mAdapter.clear();
+        // If there is a valid list of {@link Earthquake}s, then add them to the adapter's
+        // data set. This will trigger the ListView to update.
+        if (earthquakes != null && !earthquakes.isEmpty()) {
+            mAdapter.addAll(earthquakes);
+        }
+        Update(earthquakes);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<ArrayList<Eearthquake>> loader) {
+        // TODO: Loader reset, so we can clear out our existing data.
+    }
     private void Update(ArrayList<Eearthquake> earthqueke) {
         list = (ListView) findViewById(R.id.list);
-        EarthquakeAdapter adapter = new EarthquakeAdapter(this,earthqueke) ;
+        EarthquakeAdapter adapter = new EarthquakeAdapter(this, earthqueke);
         list.setAdapter(adapter);
     }
 
-    public class EartQuake extends AsyncTask<String,Void,ArrayList<Eearthquake> >{
+   /* public class EartQuake extends AsyncTask<String,Void,ArrayList<Eearthquake> >{
         @Override
         protected ArrayList<Eearthquake> doInBackground(String... strings) {
             ArrayList<Eearthquake> earthqueke = null; //new ArrayList<Eearthquake>();
@@ -71,5 +79,5 @@ task.execute(url);
         protected void onPostExecute(ArrayList<Eearthquake> eearthquakes) {
            Update( eearthquakes);
         }
-    }
+    }*/
 }
