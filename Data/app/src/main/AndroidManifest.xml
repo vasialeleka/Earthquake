@@ -20,7 +20,10 @@
             android:name=".EditActivity"
             android:label="@string/title_activity_editor"
             android:theme="@style/AppTheme" />
-
+<provider
+    android:authorities="com.e.vasialeleka.myapplication"
+    android:name=".data.PetProvider"
+    android:exported="false"/>
     </application>
 
 </manifest>
