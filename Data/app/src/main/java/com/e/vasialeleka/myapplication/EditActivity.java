@@ -3,6 +3,7 @@ package com.e.vasialeleka.myapplication;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -80,17 +81,18 @@ finish();
     String breedText = breed.getText().toString().trim();
     int weight = Integer.parseInt(mass.getText().toString());
         PetDBhelper pets = new PetDBhelper(this);
-        SQLiteDatabase database = pets.getWritableDatabase();
+     //   SQLiteDatabase database = pets.getWritableDatabase();
     ContentValues contentValues = new ContentValues();
         contentValues.put(PetContract.PetEntry.COLUMN_PET_NAME,nameText);
         contentValues.put(PetContract.PetEntry.COLUMN_PET_BREED,breedText);
         contentValues.put(PetContract.PetEntry.COLUMN_PET_GENDER,mGender);
         contentValues.put(PetContract.PetEntry.COLUMN_PET_WEIGHT,weight);
-
-        long rowId =   database.insert(PetContract.PetEntry.TABLE_NAME,null,contentValues);
-   if (rowId == -1) {
+        Uri insertNewData ;
+        insertNewData=getContentResolver().insert(PetContract.PetEntry.CONTENT_URI,contentValues);
+       // long rowId =   database.insert(PetContract.PetEntry.TABLE_NAME,null,contentValues);
+   if (insertNewData == null) {
      Toast.makeText(getApplicationContext(),"Error with saving pet",Toast.LENGTH_SHORT).show();
-   }else {Toast.makeText(getApplicationContext(),"Pet saved with row id "+rowId,Toast.LENGTH_SHORT).show();}
+   }else {Toast.makeText(getApplicationContext(),"Pet saved with row id "+insertNewData.getQuery(),Toast.LENGTH_SHORT).show();}
     }
 
     @Override
