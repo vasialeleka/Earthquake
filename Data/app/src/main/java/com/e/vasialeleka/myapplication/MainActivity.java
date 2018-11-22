@@ -78,10 +78,10 @@ PetCursorAdapter mCursorAdapter ;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+list = findViewById(R.id.list);
         mCursorAdapter = new PetCursorAdapter(this,null);
         list.setAdapter(mCursorAdapter);
-           getLoaderManager().initLoader(0,null,this);
+        getSupportLoaderManager().initLoader(0,null,this);
         floatingButton();
       //  displayDataBaseInfo();
     }
