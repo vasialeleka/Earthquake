@@ -7,14 +7,14 @@ import android.app.LoaderManager;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.Loader;
-
+android.support.v4.app.LoaderManager
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity  implements LoaderCallbacks<ArrayList<Eearthquake>>, LoaderManager.LoaderCallbacks<Object> {
+public class MainActivity extends AppCompatActivity  implements LoaderCallbacks<ArrayList<Eearthquake>> {
     private static final String url = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson";
     private static final int EARTHQUAKE_LOADER_ID = 1;
     ListView list;

@@ -5,7 +5,13 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,9 +28,10 @@ import java.net.URI;
 
 import static android.view.View.GONE;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  implements LoaderManager.LoaderCallbacks<Cursor> {
     ListView list;
-
+private static final int PET_LADER = 0;
+PetCursorAdapter mCursorAdapter ;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -72,7 +79,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mCursorAdapter = new PetCursorAdapter(this,null);
+        list.setAdapter(mCursorAdapter);
+           getLoaderManager().initLoader(0,null,callbac);
+        floatingButton();
+      //  displayDataBaseInfo();
+    }
 
+    private void floatingButton() {
         FloatingActionButton button = findViewById(R.id.fab);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        displayDataBaseInfo();
     }
 
     @Override
@@ -104,6 +117,29 @@ public class MainActivity extends AppCompatActivity {
        list.setEmptyView(emptyView);
        // cursor.close();  // don"t work
 
+    }
+
+    @NonNull
+    @Override
+    public Loader onCreateLoader(int i, @Nullable Bundle bundle) {
+
+        String[] projection = {PetContract.PetEntry._ID,
+                PetContract.PetEntry.COLUMN_PET_NAME,
+                PetContract.PetEntry.COLUMN_PET_BREED};
+
+        return new CursorLoader(this ,PetContract.PetEntry.CONTENT_URI,projection,null,null,null);
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        mCursorAdapter.swapCursor(cursor);
+    }
+
+
+
+    @Override
+    public void onLoaderReset(@NonNull Loader loader) {
+mCursorAdapter.swapCursor(null);
     }
 }
 
