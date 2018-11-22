@@ -81,7 +81,7 @@ PetCursorAdapter mCursorAdapter ;
 
         mCursorAdapter = new PetCursorAdapter(this,null);
         list.setAdapter(mCursorAdapter);
-           getLoaderManager().initLoader(0,null,callbac);
+           getLoaderManager().initLoader(0,null,this);
         floatingButton();
       //  displayDataBaseInfo();
     }
