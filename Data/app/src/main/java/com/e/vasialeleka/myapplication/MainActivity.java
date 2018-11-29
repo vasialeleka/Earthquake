@@ -54,7 +54,7 @@ PetCursorAdapter mCursorAdapter ;
         }
         if (id == R.id.item2) {
             int dafaultUri = getContentResolver().delete(PetContract.PetEntry.CONTENT_URI, null, null);
-            displayDataBaseInfo();
+          //  displayDataBaseInfo();
             return true;
         }
         return true;
@@ -71,7 +71,7 @@ PetCursorAdapter mCursorAdapter ;
         Uri defaultValue = getContentResolver().insert(PetContract.PetEntry.CONTENT_URI, contentValues);
         //long rowId = database.insert(PetContract.PetEntry.TABLE_NAME, null, contentValues);
         //  Log.v("MainActivity", "Num of row" + rowId);
-        displayDataBaseInfo();
+     //   displayDataBaseInfo();
     }
 
     @Override
@@ -84,6 +84,7 @@ list = findViewById(R.id.list);
         getSupportLoaderManager().initLoader(0,null,this);
         floatingButton();
       //  displayDataBaseInfo();
+
     }
 
     private void floatingButton() {

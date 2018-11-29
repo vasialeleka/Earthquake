@@ -7,14 +7,14 @@ import android.app.LoaderManager;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.Loader;
-android.support.v4.app.LoaderManager
+
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity  implements LoaderCallbacks<ArrayList<Eearthquake>> {
+public class MainActivity extends AppCompatActivity  implements android.support.v4.app.LoaderManager.LoaderCallbacks<ArrayList<Eearthquake>> {
     private static final String url = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson";
     private static final int EARTHQUAKE_LOADER_ID = 1;
     ListView list;
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity  implements LoaderCallbacks<
         // Initialize the loader. Pass in the int ID constant defined above and pass in null for
         // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
         // because this activity implements the LoaderCallbacks interface).
-        loaderManager.initLoader(1, null, this);
+        getSupportLoaderManager().initLoader(1, null, this);
 
         //    EartQuake task = new EartQuake();
         //     task.execute(url);
