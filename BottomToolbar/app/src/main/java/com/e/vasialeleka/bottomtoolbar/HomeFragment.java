@@ -25,14 +25,14 @@ public class HomeFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private FragmentAdapter adapter;
+    public View v ;
     private Context myContext;
 
     @Nullable
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-View v = inflater.inflate(R.layout.fragment_home,container,false) ;
+        v = inflater.inflate(R.layout.fragment_home,container,false) ;
         tabLayout = v.findViewById(R.id.tabLayout);
         viewPager = v.findViewById(R.id.viewPager);
 
