@@ -39,7 +39,8 @@ public class HomeFragment extends Fragment {
         List<Fragment> list = new ArrayList<>();
         list.add(new Socket());
         list.add(new LighrFragment());
-        FragmentManager fragManager = getActivity().getSupportFragmentManager();
+        //viewPager.setOffscreenPageLimit(list.size());
+        FragmentManager fragManager = getChildFragmentManager();//getActivity().getSupportFragmentManager();
 
           adapter = new FragmentAdapter(fragManager,list);
        viewPager.setAdapter(adapter);
