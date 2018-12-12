@@ -7,12 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
+import java.util.List;
 
 class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
-    ArrayList<String> users;
+    List<User> users;
 
-    public UserAdapter(ArrayList<String> users) {
+    public UserAdapter(List<User> users) {
         this.users = users;
     }
 
@@ -27,8 +30,9 @@ class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder( UserAdapter.ViewHolder viewHolder, int position) {
-       // viewHolder.firstName.setText(users.get(position));
-        viewHolder.firstName.setText("fgd");
+        viewHolder.firstName.setText(users.get(position).getFirstName());
+        viewHolder.secondName.setText(users.get(position).getLastName());
+        viewHolder.email.setText(users.get(position).getEmail());
     }
 
     @Override
@@ -38,9 +42,13 @@ class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView firstName;
+        public TextView secondName;
+        public TextView email;
 
         public ViewHolder( View itemView) {
             super(itemView);
+            secondName = itemView.findViewById(R.id.second);
+            email= itemView.findViewById(R.id.email);
             firstName = itemView.findViewById(R.id.first);
 
         }
