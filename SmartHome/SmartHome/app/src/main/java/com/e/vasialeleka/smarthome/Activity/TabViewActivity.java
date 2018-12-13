@@ -14,7 +14,6 @@ import com.e.vasialeleka.smarthome.Rooms.BedroomFragment;
 import com.e.vasialeleka.smarthome.Rooms.HallFragment;
 import com.e.vasialeleka.smarthome.Adapters.PageFragmentAdapter;
 import com.e.vasialeleka.smarthome.Rooms.KitchenFragment;
-import com.e.vasialeleka.smarthome.Variables;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,17 +28,18 @@ public class TabViewActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private PageFragmentAdapter adapter;
     List<Fragment> list;
+    String key;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_view);
-        String key = getIntent().getStringExtra("KEY");
+         key = getIntent().getStringExtra("KEY");
 
         url = url + key;
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
-        viewPager.setOffscreenPageLimit(Variables.countOfTabs);
+        viewPager.setOffscreenPageLimit(3);
         list = new ArrayList<>();
         list.add(new HallFragment());
         list.add(new BedroomFragment());
@@ -52,13 +52,13 @@ public class TabViewActivity extends AppCompatActivity {
         tabLayout.getTabAt(2).setIcon(ICONS[2]);
 
         Timer timer = new Timer();
-        timer.schedule(new FetchTimer(), 0, Variables.timeForUpdate);
+        timer.schedule(new FetchTimer(), 0, 2000);
 
 
     }
 
     private void asyncData(List<Fragment> list) {
-        FetchDataForRooms data = new FetchDataForRooms(list, url);
+        FetchDataForRooms data = new FetchDataForRooms(list, url,key);
         data.execute();
     }
 

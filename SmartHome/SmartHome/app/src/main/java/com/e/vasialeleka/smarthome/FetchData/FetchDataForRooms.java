@@ -16,6 +16,13 @@ import com.e.vasialeleka.smarthome.Rooms.KitchenFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,14 +40,16 @@ public class FetchDataForRooms extends AsyncTask<Void, Void, Void> {
     RecyclerView resBedroom;
     RecyclerView resKitchen;
     String urls;
-    String jsondata = null;
+    String key;
+    String jsondata = "";
 
     String json = "{\"1\":{\"id\":\"1596347812\",\"room\":\"hall\",\"group\":\"socket\",\"name\":\"\\u041b\\u0430\\u043c\\u043f\\u0430\",\"value\":\"Enable\",\"temp\":\"29\"},\"2\":{\"id\":\"2222\",\"room\":\"bedroom\",\"group\":\"socket\",\"name\":\"\\u0422\\u0435\\u043b\\u0435\\u0444\\u043e\\u043d\",\"value\":\"Disable\",\"temp\":\"25\"},\"3\":{\"id\":\"3333\",\"room\":\"bedroom\",\"group\":\"socket\",\"name\":\"\\u041e\\u0431\\u0456\\u0433\\u0440\\u0456\\u0432\\u0430\\u0447\",\"value\":\"Disable\",\"temp\":\"27\"},\"4\":{\"id\":\"4444\",\"room\":\"bedroom\",\"group\":\"socket\",\"name\":\"\\u0422\\u0435\\u043b\\u0435\\u0432\\u0456\\u0437\\u043e\\u0440\",\"value\":\"Disable\",\"temp\":\"23\"},\"5\":{\"id\":\"5555\",\"room\":\"hall\",\"group\":\"socket\",\"name\":\"\\u041a\\u043e\\u043d\\u0434\\u0438\\u0446\\u0456\\u043e\\u043d\\u0435\\u0440\",\"value\":\"Disable\",\"temp\":\"24\"},\"6\":{\"id\":\"6666\",\"room\":\"bedroom\",\"group\":\"socket\",\"name\":\"\\u0411\\u0443\\u0434\\u0438\\u043b\\u044c\\u043d\\u0438\\u043a\",\"value\":\"Disable\",\"temp\":\"28\"},\"7\":{\"id\":\"666\",\"room\":\"kitchen\",\"group\":\"socket\",\"name\":\"\\u041a\\u043e\\u043c\\u0431\\u0430\\u0439\\u043d\",\"value\":\"Disable\",\"temp\":\"25\"},\"8\":{\"id\":\"2\",\"room\":\"kitchen\",\"group\":\"socket\",\"name\":\"\\u041a\\u0430\\u0432\\u043e\\u0432\\u0430\\u0440\\u043a\\u0430\",\"value\":\"Disable\",\"temp\":\"24\"},\"9\":{\"id\":\"321\",\"room\":\"kitchen\",\"group\":\"socket\",\"name\":\"\\u0422\\u0435\\u043b\\u0435\\u0432\\u0456\\u0437\\u043e\\u0440\",\"value\":\"Disable\",\"temp\":\"22\"},\"10\":{\"id\":\"0\",\"room\":\"kitchen\",\"group\":\"socket\",\"name\":\"\\u0425\\u043e\\u043b\\u043e\\u0434\\u0438\\u043b\\u044c\\u043d\\u0438\\u043a\",\"value\":\"Disable\",\"temp\":\"27\"},\"11\":{\"id\":\"0\",\"room\":\"kitchen\",\"group\":\"socket\",\"name\":\"\\u041c\\u0456\\u043a\\u0440\\u043e\\u0445\\u0432\\u0438\\u043b\\u044c\\u043e\\u0432\\u0430\",\"value\":\"Disable\",\"temp\":\"23\"},\"12\":{\"id\":\"2\",\"room\":\"kitchen\",\"group\":\"socket\",\"name\":\"\\u0427\\u0430\\u0439\\u043d\\u0438\\u043a\",\"value\":\"Disable\",\"temp\":\"28\"}}";
 
 
-    public FetchDataForRooms(List<Fragment> fragments, String url) {
+    public FetchDataForRooms(List<Fragment> fragments, String url, String key) {
         this.fragments = fragments;
         this.urls = url;
+        this.key = key;
     }
 
     @Override
@@ -53,17 +62,17 @@ public class FetchDataForRooms extends AsyncTask<Void, Void, Void> {
         resBedroom = bedroom.getBadroomRecyclerView();
         resKitchen = kitchen.getKitchenRecyclerView();
 
-        SocketRecAdapter adapterKitchen = new SocketRecAdapter(kitchen.getContext(),socketKitchen);
+        SocketRecAdapter adapterKitchen = new SocketRecAdapter(key, kitchen.getContext(), socketKitchen, socketBadroom);
         resKitchen.setLayoutManager(new LinearLayoutManager(kitchen.getActivity()));
         resKitchen.setAdapter(adapterKitchen);
 
-        SocketRecAdapter adapterBedroom = new SocketRecAdapter(bedroom.getContext(), socketBadroom);
+        SocketRecAdapter adapterBedroom = new SocketRecAdapter(key, bedroom.getContext(), socketBadroom, socketKitchen);
         resBedroom.setLayoutManager(new LinearLayoutManager(bedroom.getActivity()));
         resBedroom.setAdapter(adapterBedroom);
 
-        SocketRecAdapter adapter = new SocketRecAdapter(hall.getContext(), socketHall);//socketList);
+   /*     SocketRecAdapter adapter = new SocketRecAdapter(hall.getContext(), socketHall);//socketList);
         res.setLayoutManager(new LinearLayoutManager(hall.getActivity()));
-        res.setAdapter(adapter);
+        res.setAdapter(adapter);*/
 
 
         Log.e("Update info", "Success");
@@ -72,7 +81,7 @@ public class FetchDataForRooms extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... voids) {
-       /* try {
+        try {
             URL url = new URL(urls);
             try {
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -90,7 +99,7 @@ public class FetchDataForRooms extends AsyncTask<Void, Void, Void> {
             // httpURLConnection.connect();
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        }*/
+        }
 
 
         socketHall = new ArrayList<>();
@@ -101,29 +110,35 @@ public class FetchDataForRooms extends AsyncTask<Void, Void, Void> {
 
         try {
             //TODO when server will be on
-            //JSONObject js = new JSONObject(jsondaata)
-            JSONObject js = new JSONObject(json);
+            JSONObject js = new JSONObject(jsondata);
+            //  JSONObject js = new JSONObject(json);
             for (int i = 1; i <= 12; i++) {
-                JSONObject obj = js.getJSONObject("" + i);
-                String id = obj.getString("id");
-                String group = obj.getString("group");
-                String room = obj.getString("room");
-                String value = obj.getString("value");
-                String temp = obj.getString("temp");
-                String name = obj.getString("name");
+                try {
+                    JSONObject obj = js.getJSONObject("" + i);
+                    String id = obj.getString("id");
+                    String group = obj.getString("group");
+                    String room = obj.getString("room");
+                    String value = obj.getString("value");
+                    String temp = obj.getString("temp");
+                    String name = obj.getString("name");
 
-                if (room.equals("hall") && group.equals("socket")) {
-                    socketHall.add(new Socket(value, temp, name, id));
-                } else if (room.equals("bedroom") && group.equals("socket")) {
-                    socketBadroom.add(new Socket(value, temp, name, id));
-                } else if (room.equals("kitchen") && group.equals("socket")) {
-                    socketKitchen.add(new Socket(value, temp, name, id));
-                } else if (room.equals("bathroom") && group.equals("socket")) {
+                    if (room.equals("hall") && group.equals("socket")) {
+                        socketHall.add(new Socket(value, temp, name, id, group, room));
+                    } else if (room.equals("bedroom") && group.equals("socket")) {
+                        socketBadroom.add(new Socket(value, temp, name, id, group, room));
+                    } else if (room.equals("kitchen") && group.equals("socket")) {
+                        socketKitchen.add(new Socket(value, temp, name, id, group, room));
+                    } else if (room.equals("bathroom") && group.equals("socket")) {
 
-                    socketBathroom.add(new Socket(value, temp, name, id));
+                        socketBathroom.add(new Socket(value, temp, name, id, group, room));
+                    }
+                    Log.e("updata", "update");
+                } catch (JSONException e) {
+                    i++;
                 }
             }
         } catch (JSONException e) {
+            Log.e("error", "JSONError");
             e.printStackTrace();
         }
         return null;

@@ -1,29 +1,45 @@
 package com.e.vasialeleka.smarthome.Elements;
+import com.google.gson.annotations.SerializedName;
 
 public class Socket {
+@SerializedName("value")
     private String value;
     private  String temp;
     private String name;
+    @SerializedName("id")
     private String id;
+    @SerializedName("group")
     private  String group;
     private String room;
 
-    public Socket(String value, String temp,String name) {
-        this.name = name;
+
+
+
+
+
+    public void setValue(String value) {
         this.value = value;
-        this.temp = temp;
-
-
     }
 
-    public Socket(String value, String temp, String name, String id) {
-        this.value = value;
+    public void setTemp(String temp) {
         this.temp = temp;
+    }
+
+    public void setName(String name) {
         this.name = name;
+    }
+
+    public void setId(String id) {
         this.id = id;
     }
 
+    public void setGroup(String group) {
+        this.group = group;
+    }
 
+    public void setRoom(String room) {
+        this.room = room;
+    }
 
     public Socket(String value, String temp, String name, String id, String group, String room) {
 
