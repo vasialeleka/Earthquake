@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_first_fragmnet.*
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -42,6 +44,7 @@ AsyncTaskRequest().execute(url)
 
         override fun doInBackground(vararg url: String?): String {
             var text: String
+            var textReturn:String=""
             var connection = URL(url[0]).openConnection() as HttpURLConnection
 try{
             connection.connect()
@@ -53,7 +56,19 @@ try{
                 connection.disconnect()
             }
 
-            return text
+try {
+
+
+    val jsonObject = JSONObject(text)
+    val jsonArray = jsonObject.getJSONArray("features")
+    for (i in 0..jsonArray.length()) {
+        var current = jsonArray.getJSONObject(i)
+        var properties = current.getJSONObject("properties")
+        var place = properties.getString("place")
+        textReturn += "\n $place"
+    }
+} catch (e :JSONException ){}
+            return textReturn
         }
     }
 }
