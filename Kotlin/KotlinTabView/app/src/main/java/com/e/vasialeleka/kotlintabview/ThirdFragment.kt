@@ -16,6 +16,9 @@ class ThirdFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+       // var first = EarthQuake(1.1,"rsf")
+
+
         return inflater.inflate(R.layout.fragment_third, container, false)
     }
 
