@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "382413519989",
+    "firebase_url": "https://firstprogect-bdfda.firebaseio.com",
+    "project_id": "firstprogect-bdfda",
+    "storage_bucket": "firstprogect-bdfda.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382413519989:android:be84ace8523b8be8",
+        "android_client_info": {
+          "package_name": "com.e.vasialeleka.firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "382413519989-df9l596sio3ug6b0j1kgc4f5m8o0jugj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.e.vasialeleka.firebase",
+            "certificate_hash": "741e9929cee917059b4948d87d7d55506c1d1835"
+          }
+        },
+        {
+          "client_id": "382413519989-1uvq7garfgrkck57cuc1t7pgrrvg1kgj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_bpe6FDgzU8XQ1cTQoEfHSV8-1cGC4lI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "382413519989-1uvq7garfgrkck57cuc1t7pgrrvg1kgj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
