@@ -1,5 +1,6 @@
 package com.e.vasialeleka.firebase;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                 if (firebaseUser != null) {
                     Log.w("MainActivity", "user signed in");
+                    Intent intent = new Intent(MainActivity.this,ListTasks.class);
+                    startActivity(intent);
                 } else {
                     Log.w("MainActivity", "user signed out");
                 }
@@ -48,15 +51,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        //   FirebaseUser currentUser = mAuth.getCurrentUser();
-        //  updateUI(currentUser);
+         //Check if user is signed in (non-null) and update UI accordingly.
+           FirebaseUser currentUser = mAuth.getCurrentUser();
+          if (currentUser!= null){
+              Intent intent = new Intent(MainActivity.this,ListTasks.class);
+              startActivity(intent);
+          }
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.authorization) {
             sing_in(email.getText().toString(), password.getText().toString());
+            Intent intent = new Intent(MainActivity.this,ListTasks.class);
+            startActivity(intent);
 
         } else if (v.getId() == R.id.registration) {
             registration(email.getText().toString(), password.getText().toString());
@@ -83,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(MainActivity.this, "Complete", Toast.LENGTH_SHORT).show();
+
 
                 } else {
                     Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
