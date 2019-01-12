@@ -11,7 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -35,7 +35,6 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     Uri pincedUri;
     private EditText userName, userEmail, userPassword, userPassword2;
-    private Button registration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,7 +141,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void updateUi() {
-        Intent intent = new Intent(RegisterActivity.this , HomeActivity.class);
+        Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
         startActivity(intent);
     }
 
@@ -163,7 +162,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void openGallery() {
-        //TODO open gallery Intent
+
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         //intent.setAction("image/*");
