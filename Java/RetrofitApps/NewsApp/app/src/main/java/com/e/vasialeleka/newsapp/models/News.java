@@ -30,4 +30,16 @@ public class News {
     public void setArticle(List<Article> article) {
         this.article = article;
     }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public int getTotalResult() {
+        return totalResult;
+    }
+
+    public List<Article> getArticle() {
+        return article;
+    }
 }
