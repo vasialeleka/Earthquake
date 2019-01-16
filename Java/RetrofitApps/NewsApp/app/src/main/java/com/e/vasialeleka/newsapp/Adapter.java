@@ -93,7 +93,7 @@ holder.author.setText(article.getAuthor());
 
         @Override
         public void onClick(View v) {
-         //   onItemClickListener.onItemClick(v, getAdapterPosition());
+            onItemClickListener.onItemClick(v, getAdapterPosition());
         }
     }
 

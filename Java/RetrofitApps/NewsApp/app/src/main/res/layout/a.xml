@@ -27,6 +27,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+
+
+
+                <ImageView
+                    android:id="@+id/img"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:scaleType="centerCrop" />
                 <TextView
                     android:id="@+id/author"
                     android:layout_width="wrap_content"
@@ -46,13 +54,6 @@
                     android:background="@drawable/circle_white"
                     android:padding="8dp"
                     android:text="1 Juny 1998" />
-
-
-                <ImageView
-                    android:id="@+id/img"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:scaleType="centerCrop" />
             </FrameLayout>
 
             <LinearLayout

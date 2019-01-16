@@ -1,23 +1,27 @@
-package com.e.vasialeleka.newsapp;
+package com.e.vasialeleka.newsapp.activities;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.telecom.Call;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 import android.support.v7.widget.SearchView;
 import android.app.SearchManager;
 
-import android.widget.SearchView.OnQueryTextListener;
-
+import com.e.vasialeleka.newsapp.Adapter;
+import com.e.vasialeleka.newsapp.R;
+import com.e.vasialeleka.newsapp.Utils;
 import com.e.vasialeleka.newsapp.api.ApiClient;
 import com.e.vasialeleka.newsapp.api.ApiInterface;
 import com.e.vasialeleka.newsapp.models.Article;
@@ -39,6 +43,7 @@ public class NewsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
         swipeRefreshLayout = findViewById(R.id.swipe_refresh);
@@ -83,6 +88,24 @@ swipeRefreshLayout.setRefreshing(true);
                     adapter = new Adapter(articles, NewsActivity.this);
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
+                    adapter.setOnItemClickListener(new Adapter.OnItemClickListener() {
+                        @SuppressLint("LongLogTag")
+                        @Override
+                        public void onItemClick(View view, int position) {
+                            Intent intent = new Intent(NewsActivity.this,NewsDetailActivity.class);
+                            Article article = articles.get(position);
+                            Log.e("_______________________________________________________________","Click");
+                            intent.putExtra("URL",article.getUrl());
+                            intent.putExtra("TITLE",article.getTitle());
+                            intent.putExtra("IMG",article.getUrlToImage());
+                            intent.putExtra("DATA",article.getPublishedAt());
+                            intent.putExtra("SOURCE",article.getSource().getName());
+                            intent.putExtra("AUTHOR",article.getAuthor());
+                            startActivity(intent);
+
+
+                        }
+                    });
                     swipeRefreshLayout.setRefreshing(false);
 
                 } else {
