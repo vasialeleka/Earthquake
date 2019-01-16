@@ -1,12 +1,21 @@
 package com.e.vasialeleka.newsapp;
 
+
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telecom.Call;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
+import android.support.v7.widget.SearchView;
+import android.app.SearchManager;
+
+import android.widget.SearchView.OnQueryTextListener;
 
 import com.e.vasialeleka.newsapp.api.ApiClient;
 import com.e.vasialeleka.newsapp.api.ApiInterface;
@@ -35,17 +44,21 @@ private  Adapter adapter;
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setNestedScrollingEnabled(false);
-        loadJson();
+        loadJson("");
 
     }
 
-    public void loadJson(){
+    public void loadJson(final String keyword){
 
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
         //Call<News> call;
         String country = Utils.getCountry();
         retrofit2.Call<News> call;
-         call = apiInterface.getNews(country,API_KEY);
+
+        if(keyword.length()>0){
+            call = apiInterface.getNewsSearch(keyword,"publishedAt",API_KEY);
+        }else{
+         call = apiInterface.getNews(country,API_KEY);}
          call.enqueue(new Callback<News>() {
              @Override
              public void onResponse(retrofit2.Call<News> call, Response<News> response) {
@@ -66,5 +79,34 @@ private  Adapter adapter;
 
              }
          });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main,menu);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        MenuItem seachMenuItems =  menu.findItem(R.id.action_search);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setQueryHint("Search News...");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+             if(query.length()>2){
+                 loadJson(query);
+             }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                loadJson(newText);
+                return false;
+            }
+        });
+seachMenuItems.getIcon().setVisible(false,false);
+       return true;
+        //return super.onCreateOptionsMenu(menu);
     }
 }
