@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
+       <item android:id="@+id/top"
+           android:icon="@drawable/ic_top"
+           android:title="Top news"/>
         <item
             android:id="@+id/general"
             android:icon="@drawable/ic_general"
@@ -14,7 +17,7 @@
         <item
             android:id="@+id/entertaiment"
             android:icon="@drawable/ic_entertaiment"
-            android:title="Entertziment" />
+            android:title="Enterteiment" />
         <item
             android:id="@+id/helth"
             android:icon="@drawable/ic_health"
