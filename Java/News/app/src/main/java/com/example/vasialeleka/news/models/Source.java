@@ -11,4 +11,12 @@ public class Source {
     @SerializedName("name")
     @Expose
     private String name;
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

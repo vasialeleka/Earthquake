@@ -6,10 +6,7 @@
        <item android:id="@+id/top"
            android:icon="@drawable/ic_top"
            android:title="Top news"/>
-        <item
-            android:id="@+id/general"
-            android:icon="@drawable/ic_general"
-            android:title="General" />
+
         <item
             android:id="@+id/business"
             android:icon="@drawable/ic_business"

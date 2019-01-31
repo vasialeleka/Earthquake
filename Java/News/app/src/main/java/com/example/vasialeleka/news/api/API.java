@@ -1,4 +1,4 @@
-package com.example.vasialeleka.news;
+package com.example.vasialeleka.news.api;
 import com.example.vasialeleka.news.models.News;
 
 import retrofit2.Call;
