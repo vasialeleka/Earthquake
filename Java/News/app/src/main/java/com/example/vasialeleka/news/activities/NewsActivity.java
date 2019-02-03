@@ -15,7 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.Adapter;
+
 import android.widget.Toast;
 
 import com.example.vasialeleka.news.Utils;
@@ -33,9 +33,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NewsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class NewsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NewsAdapter.OnItemClickListener {
     private DrawerLayout drewer;
-    private String openSiteUrl = "https://www.bbc.com/news/world";
     private List<Article> articles = new ArrayList<>();
     public static final String API_KEY = "e60697f7f9874f35a82708c0df1618a9";
     private NewsAdapter adapter;
@@ -48,12 +47,15 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
-        //swipeRefreshLayout = findViewById(R.id.swipe_refresh);
-    /*    swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        if (savedInstanceState != null) {
+           topic= savedInstanceState.getString("topic");
+        }
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(true);
-                if (topic != null) {
+                if (topic == null) {
                     makeRequest("top");
                 } else {
                     makeRequest(topic);
@@ -61,7 +63,7 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
             }
 
 
-        });*/
+        });
 
         //onLoadingSwipe("top");
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -83,11 +85,11 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-   /* private void onLoadingSwipe(final String cat) {
+ /*   private void onLoadingSwipe(final String category) {
         swipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
-                makeRequest(cat);
+                makeRequest(category);
             }
         });
     }*/
@@ -119,7 +121,7 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
                 makeRequest("business");
                 break;
             case R.id.entertaiment:
-                makeRequest("entertaiment");
+                makeRequest("entertainment");
                 break;
             case R.id.helth:
                 makeRequest("health");
@@ -135,7 +137,7 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.openSite:
                 openSite();
-                break;//TODO intent
+                break;
         }
         //drewer.closeDrawer(GravityCompat.START);
         return true;
@@ -143,41 +145,58 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
 
     private void openSite() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
+        String openSiteUrl = "https://www.bbc.com/news/world";
         intent.setData(Uri.parse(openSiteUrl));
         startActivity(intent);
     }
 
     private void makeRequest(String r) {
-      //  Toast.makeText(NewsActivity.this, "Refresh",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(NewsActivity.this, "Refresh",Toast.LENGTH_SHORT).show();
         topic = r;
         API api = ApiClient.getApiClient().create(API.class);
         String country = Utils.getCountry();
         Call<News> call;
         if (r.equals("top")) {
             call = api.getNews(country, API_KEY);
-
         } else {
-
             call = api.getCategoryNews(country, API_KEY, r);
-
         }
         call.enqueue(new Callback<News>() {
             @Override
-            public void onResponse(Call<News> call, Response<News> response) {
+            public void onResponse(@NonNull Call<News> call, @NonNull Response<News> response) {
+                assert response.body() != null;
                 articles = response.body().getArticle();
                 adapter = new NewsAdapter(articles, NewsActivity.this);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-               // swipeRefreshLayout.setRefreshing(false);
+                adapter.setOnClickListener(NewsActivity.this);
+                swipeRefreshLayout.setRefreshing(false);
 
             }
 
             @Override
-            public void onFailure(Call<News> call, Throwable t) {
+            public void onFailure(@NonNull Call<News> call, @NonNull Throwable t) {
                 Toast.makeText(NewsActivity.this, "No results", Toast.LENGTH_SHORT).show();
-               // swipeRefreshLayout.setRefreshing(false);
+                swipeRefreshLayout.setRefreshing(false);
 
             }
         });
     }
+
+    @Override
+    public void onItemClick(int position) {
+        Article clicedArticle = articles.get(position);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(clicedArticle.getUrl()));
+        startActivity(intent);
+        // Toast.makeText(NewsActivity.this ,""+clicedArticle.getUrl(),Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("topic", topic);
+    }
+
+
 }
