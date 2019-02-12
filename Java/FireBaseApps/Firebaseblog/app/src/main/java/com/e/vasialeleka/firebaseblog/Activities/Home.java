@@ -1,9 +1,11 @@
 package com.e.vasialeleka.firebaseblog.Activities;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -16,8 +18,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.e.vasialeleka.firebaseblog.Fragments.HomeFragment;
+import com.e.vasialeleka.firebaseblog.Fragments.ProfileFragment;
+import com.e.vasialeleka.firebaseblog.Fragments.SettingsFragment;
 import com.e.vasialeleka.firebaseblog.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -100,23 +106,31 @@ public class Home extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.home) {
 
-        } else if (id == R.id.nav_slideshow) {
+            openFragmnet(new HomeFragment(),"Home");
+        } else if (id == R.id.profile) {
 
-        } else if (id == R.id.nav_manage) {
+          openFragmnet(new ProfileFragment(),"Profile");
+        } else if (id == R.id.settings) {
+            openFragmnet(new SettingsFragment(),"Settings");
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_log_out) {
+        } else if (id == R.id.log_out) {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+            startActivity(intent);
+            finish();
 
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void openFragmnet(Fragment fragment,String s) {
+        getSupportActionBar().setTitle(s);
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
     }
 
     public void updateNavBar() {
@@ -135,7 +149,7 @@ public class Home extends AppCompatActivity
         if (currentUser.getPhotoUrl() != null) {
             Glide.with(this).load(currentUser.getPhotoUrl()).into(userPhoto);
         } else {
-        userPhoto.setImageResource(R.drawable.img_210318);
+            userPhoto.setImageResource(R.drawable.img_210318);
         }
 
     }
